@@ -16,18 +16,25 @@ object Caksus {
 
     val hosts = fields.map(_(9)).toSeq.groupBy(identity)
 
-    val kv = fields.map(x => (x(9), x(12)))
+    val kv = fields.map{ x =>  
+      (x(9), 
+       (x(12).split("=").last.toInt, 
+        x(7).split("=").last.toLong - x(6).split("=").last.toLong)
+      )}  
       .groupBy(_._1)
-      .mapValues(_.map(_._2).map(_.drop(14)))
+      .mapValues(_.map(_._2))
+
 
     for (key <- kv.keys.toSeq.sorted) {
       println(kv(key).size + "\t" 
         + key + "\t"
-        + (kv(key) mkString " ") + "\t=avg=\t"
-        + kv(key).map(_.toInt).sum / kv(key).size)
+        //+ (kv(key) mkString " ")
+        + "\tworker\t"
+        + kv(key).map(_._1).sum / kv(key).size
+        + "\tmaster\t"
+        + kv(key).map(_._2).sum / kv(key).size)
     }   
   }
 }
-
 
 Caksus.main(args)
