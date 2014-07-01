@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     int *shm;
 	
 	if (argc < 2) {
-		printf("shm [option]\n");
+		printf("shm check | update | [0 - 255]\n");
 		exit(0);
 	}
 
